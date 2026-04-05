@@ -1,4 +1,5 @@
 use clap::{Parser, Subcommand};
+use colored::Colorize;
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::PathBuf;
@@ -110,20 +111,24 @@ fn main() {
         Commands::List => {
             // header
             println!(
-                "{:3} {:^6} {:8} {:10} {}",
+                "{:<4} {:^8} {:10} {:12} {}",
                 "ID", "Status", "Priority", "Due", "Task"
             );
             for (i, todo) in todos.iter().enumerate() {
-                let status = if todo.done { "✔" } else { " " };
+                let status = if todo.done {
+                    "✔".green()
+                } else {
+                    " ".white()
+                };
                 let due = todo.due_date.as_ref().map(|d| d.as_str()).unwrap_or("None");
                 let priority = match todo.priority {
-                    Priority::High => "High",
-                    Priority::Medium => "Medium",
-                    Priority::Low => "Low",
+                    Priority::High => "High".red(),
+                    Priority::Medium => "Medium".yellow(),
+                    Priority::Low => "Low".green(),
                 };
 
                 println!(
-                    "{:3} {:^6} {:8} {:10} {}",
+                    "{:<4} {:^8} {:10} {:12} {}",
                     i, status, priority, due, todo.task
                 );
             }
