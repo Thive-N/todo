@@ -108,13 +108,14 @@ fn main() {
             println!("Task added.");
         }
         Commands::List => {
+            // header
+            println!(
+                "{:3} {:^6} {:8} {:10} {}",
+                "ID", "Status", "Priority", "Due", "Task"
+            );
             for (i, todo) in todos.iter().enumerate() {
                 let status = if todo.done { "✔" } else { " " };
-                let due = todo
-                    .due_date
-                    .as_ref()
-                    .map(|d| d.as_str())
-                    .unwrap_or("No due date");
+                let due = todo.due_date.as_ref().map(|d| d.as_str()).unwrap_or("None");
                 let priority = match todo.priority {
                     Priority::High => "High",
                     Priority::Medium => "Medium",
@@ -122,8 +123,8 @@ fn main() {
                 };
 
                 println!(
-                    "{}: [{}] {} (Priority: {}, Due: {})",
-                    i, status, todo.task, priority, due
+                    "{:3} {:^6} {:8} {:10} {}",
+                    i, status, priority, due, todo.task
                 );
             }
         }
